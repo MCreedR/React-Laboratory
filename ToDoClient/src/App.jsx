@@ -1,10 +1,24 @@
 import React from "react";
+import { useState } from "react";
 import ToDoInput from "./components/ToDoInput";
 import ToDoItem from "./components/ToDoItem";
 
 const App = () => {
 
-  const demoTasks = ["Learn .NET Core", "Connect DataBase", "Set up React v4"]
+  const [tasks, setTasks] = useState([]);
+
+  const addTask = (title) => {
+    const newTask = {
+      id: Date.now(),
+      title: title,
+      isCompleted: false
+    };
+    setTasks([...tasks, newTask]);
+  }
+
+  const deleteTask = (id) => {
+    setTasks(tasks.filter(task => task.id !== id));
+  };
 
   return (
     <div className="min-h-screen bg-zinc-900 py-10 px-4">
@@ -14,11 +28,11 @@ const App = () => {
           My<span>Tasks</span>
         </h1>
 
-        <ToDoInput />
+        <ToDoInput onAddTask={addTask}/>
 
         <div className="mt-4">
-          {demoTasks.map((task, index) => (
-            <ToDoItem key={index} task={task}/>
+          {tasks.map((task, index) => (
+            <ToDoItem key={task.id} task={task} onDelete={deleteTask}/>
           ))}
         </div>
 
